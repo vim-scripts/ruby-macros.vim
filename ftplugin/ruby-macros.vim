@@ -1,3 +1,10 @@
+" Vim filetype plugin
+" Language:	Ruby
+" Maintainer: Carl Mueller, cmlr@math.rochester.edu
+" Last Change:	December 17, 2001
+" Version:  1.01
+" Website:  http://www.math.rochester.edu/u/cmlr/vim/syntax/index.html
+"
 "  This file gives some macros to help type Ruby programs.
 
 set notimeout
@@ -78,7 +85,7 @@ iab <buffer> until <C-R>=<SID>SpecialAbbrev("until")<CR>
 iab <buffer> while <C-R>=<SID>SpecialAbbrev("while")<CR>
 
 function! s:SpecialAbbrev(string)
-    if strpart(getline(line(".")),0,col(".")-1) =~ '\S'  " Not a blank line.
+    if getline(line(".")) =~ '\S'  " Not a blank line.
 	return a:string
     else 
 	return a:string . "\<CR>end\<Esc>kA"
