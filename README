@@ -1,0 +1,23 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=163
+
+This plugin is for editing ruby files.
+
+Typing "for" on a blank line will result in
+
+for  in  
+end
+
+with the cursor positioned before the "in".  
+The same will happen with "while", "until", 
+and so on.  But if the line is not blank,
+"for" will just insert itself.
+
+Also, symbols like " are inserted in matching
+pairs, with the cursor in between.
+
+"K" runs ruby on the current buffer, and 
+the "F1" function key puts a line
+#!/usr/math/bin/ruby
+on the first line.  (You will have to edit 
+this part).
+
