@@ -1,8 +1,8 @@
 " Vim filetype plugin
 " Language:	Ruby
 " Maintainer: Carl Mueller, cmlr@math.rochester.edu
-" Last Change:	December 17, 2001
-" Version:  1.01
+" Last Change:	July 25, 2002
+" Version:  1.2
 " Website:  http://www.math.rochester.edu/u/cmlr/vim/syntax/index.html
 "
 "  This file gives some macros to help type Ruby programs.
@@ -24,13 +24,13 @@ inoremap <buffer> ;h <Space>=><Space>
 inoremap <buffer> " <C-R>=<SID>Double('"','"')<CR>
 inoremap <buffer> ` <C-R>=<SID>Double('`','`')<CR>
 inoremap <buffer> ' <C-R>=<SID>Double("\'","\'")<CR>
-inoremap <buffer> ( <C-R>=<SID>Double("(",")")<CR>
+inoremap <buffer> ( ()<Left>
 inoremap <buffer> [ <C-R>=<SID>Double("[","]")<CR>
 inoremap <buffer> { <C-R>=<SID>Double("{","}")<CR>
 
 function! s:Double(left,right)
     if strpart(getline(line(".")),col(".")-2,2) == a:left . a:right
-	return "\<C-O>s"
+	return "\<Del>"
     else
 	return a:left . a:right . "\<Left>"
     endif
@@ -45,12 +45,12 @@ vnoremap <buffer> `` <C-C>`>a`<Esc>`<i`<Esc>
 noremap <buffer> <C-Del> :call <SID>DeleteBrackets()<CR>
 
 function! s:DeleteBrackets()
-   let s:c = getline(line("."))[col(".") - 1]
-   if s:c == '{' || c == '[' || c == '('
-      normal %x``x
-   elseif s:c == '}' || s:c == ']' || s:c == ')'
-      normal %%x``x``
-   elseif s:c == '"'
+   let c = getline(line("."))[col(".") - 1]
+   if c =~ '{[('
+      normal %r ``x
+   elseif c =~ '}])'
+      normal %%x``r ``
+   elseif c == '"'
       exe "normal x/\"\<CR>x``"
    endif
 endfunction
@@ -72,8 +72,6 @@ function! s:DoubleBars()
 endfunction
 
 iab <buffer> def <C-R>=<SID>SpecialAbbrev("def")<CR>
-" iab <buffer> else <BS>else    " Taken care of by vim 6.0 indenting.
-iab <buffer> elsif <BS>elsif
 
 iab <buffer> for <C-R>=<SID>For()<CR>
 iab <buffer> if <C-R>=<SID>SpecialAbbrev("if")<CR>
@@ -93,7 +91,7 @@ function! s:SpecialAbbrev(string)
 endfunction
 
 function! s:For()
-    if strpart(getline(line(".")),0,col(".")-1) =~ '\S'  " Not a blank line.
+    if getline(line(".")) =~ '\S'  " Not a blank line.
 	return "for"
     else 
 	return "for in \<CR>end\<Esc>k$3hi"
@@ -102,14 +100,4 @@ endfunction
 
 function! s:Case()
     return "case\<Esc>owhen \<Esc>oend\<Esc>2kA"
-endfunction
-
-iab <buffer> do <C-R>=<SID>DoAbbrev()<CR>
-
-function! s:DoAbbrev()
-    if strpart(getline(line(".")),0,col(".")-1) =~ '^\s*\S*\s*$'
-	return "do" . "\<CR>end\<Esc>kA"
-    else
-	return "do"
-    endif
 endfunction
